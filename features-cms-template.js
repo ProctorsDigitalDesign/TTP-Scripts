@@ -1,136 +1,126 @@
-let filtersWrap = document.querySelector('.inline_filters_layout');
+let filtersWrap=document.querySelector(".inline_filters_layout");
 
-window.fsAttributes = window.fsAttributes || [];
+window.fsAttributes=window.fsAttributes||[],
 window.fsAttributes.push([
-  'cmscombine',
-  (combineInstances) => {
-    console.log('CMS Combine Initialized:', combineInstances);
+  "cmscombine",
+  e=>{
+    console.log("CMS Combine Initialized:",e),
 
     window.fsAttributes.push([
-      'cmsload',
-      (loadInstances) => {
-        console.log('CMS Load Initialized:', loadInstances);
+      "cmsload",
+      e=>{
+        console.log("CMS Load Initialized:",e),
 
         window.fsAttributes.push([
-          'cmssort',
-          (sortInstances) => {
-            const sortButton = document.querySelector('.fs_cmssort_button');
-            if (sortButton) sortButton.click();
+          "cmssort",
+          e=>{
+            const t=document.querySelector(".fs_cmssort_button");
+            t&&t.click()
           }
-        ]);
+        ]),
 
         window.fsAttributes.push([
-          'cmsfilter',
-          (filterInstances) => {
-            console.log('CMS Filter Initialized:', filterInstances);
+          "cmsfilter",
+          e=>{
+            console.log("CMS Filter Initialized:",e),
 
-            filterInstances.forEach((filterInstance) => {
-              function hideEmptyFilters() {
-                const filtersData = filterInstance.filtersData;
-                let resultsArray = [];
+            e.forEach(e=>{
+              function t(){
+                const t=e.filtersData;
+                let n=[];
 
-                filtersData.forEach(function (element) {
-                  const elements = element.elements;
-                  elements.forEach(function (element) {
-                    let filterValue = element.value;
-                    let resultsNumber = element.resultsCount;
-                    resultsArray.push({
-                      filterName: filterValue,
-                      filterResults: resultsNumber
-                    });
+                t.forEach(function(e){
+                  const t=e.elements;
+                  t.forEach(function(e){
+                    let t=e.value,o=e.resultsCount;
+                    n.push({
+                      filterName:t,
+                      filterResults:o
+                    })
+                  })
+                }),
+
+                n.forEach(function(e){
+                  let t=Array.from(
+                    document.querySelectorAll("[fs-cmsfilter-field]")
+                  ).filter(function(t){
+                    return t.textContent.trim()===e.filterName
                   });
-                });
 
-                resultsArray.forEach(function (filter) {
-                  let elements = Array.from(
-                    document.querySelectorAll('[fs-cmsfilter-field]')
-                  ).filter(function (element) {
-                    return element.textContent.trim() === filter.filterName;
-                  });
+                  t.forEach(function(t){
+                    let n=t.parentElement;
 
-                  elements.forEach(function (element) {
-                    let parentElement = element.parentElement;
-
-                    if (
-                      parentElement &&
-                      parentElement.tagName.toLowerCase() !== 'div'
-                    ) {
-                      if (filter.filterResults === 0) {
-                        parentElement.style.display = 'none';
-                      } else {
-                        parentElement.style.display = 'block';
-                        parentElement.style.opacity = 1;
-                        if (filtersWrap) filtersWrap.style.opacity = 1;
-                      }
-                    }
-                  });
-                });
+                    n&&"div"!==n.tagName.toLowerCase()&&(
+                      0===e.filterResults
+                        ?n.style.display="none"
+                        :(n.style.display="block",
+                          n.style.opacity=1,
+                          filtersWrap&&(filtersWrap.style.opacity=1))
+                    )
+                  })
+                })
               }
 
-              hideEmptyFilters();
-            });
-          },
-        ]);
-      },
-    ]);
-  },
+              t()
+            })
+          }
+        ])
+      }
+    ])
+  }
 ]);
 
-document.addEventListener('DOMContentLoaded', function () {
-  var contentDiv = document.getElementById('maxContent');
-  var toggleButton = document.getElementById('toggleButton');
-  var toggleText = document.getElementById('toggleText');
-  var maxHeight = 200;
+document.addEventListener("DOMContentLoaded",function(){
+  var e=document.getElementById("maxContent"),
+    t=document.getElementById("toggleButton"),
+    n=document.getElementById("toggleText"),
+    o=200;
 
-  if (contentDiv && toggleButton && toggleText && contentDiv.scrollHeight > maxHeight) {
-    contentDiv.style.maxHeight = maxHeight + 'px';
-    contentDiv.style.overflow = 'hidden';
-    toggleButton.style.display = 'inline-block';
+  if(e&&t&&n&&e.scrollHeight>o){
+    e.style.maxHeight=o+"px",
+    e.style.overflow="hidden",
+    t.style.display="inline-block";
 
-    var isExpanded = false;
+    var i=!1;
 
-    toggleButton.addEventListener('click', function () {
-      if (isExpanded) {
-        contentDiv.style.maxHeight = maxHeight + 'px';
-        toggleText.textContent = 'Show More';
-        toggleButton.classList.remove('open');
-      } else {
-        contentDiv.style.maxHeight = contentDiv.scrollHeight + 'px';
-        toggleText.textContent = 'Show Less';
-        toggleButton.classList.add('open');
-      }
-      isExpanded = !isExpanded;
-    });
+    t.addEventListener("click",function(){
+      i
+        ?(e.style.maxHeight=o+"px",
+          n.textContent="Show More",
+          t.classList.remove("open"))
+        :(e.style.maxHeight=e.scrollHeight+"px",
+          n.textContent="Show Less",
+          t.classList.add("open")),
+      i=!i
+    })
   }
 
-  const anchorBar = document.getElementById('anchor-bar');
-  if (anchorBar && anchorBar.classList.contains('w-condition-invisible')) {
-    document.body.classList.add('anchor-hidden');
-  }
+  const l=document.getElementById("anchor-bar");
+  l&&l.classList.contains("w-condition-invisible")&&
+    document.body.classList.add("anchor-hidden");
 
-  const containers = document.querySelectorAll('#hubspotFormContainer, #hubspotFormContainer2');
-  const fallbacks = document.querySelectorAll('#hubspotFormFallback, #hubspotFormFallback2');
+  const c=document.querySelectorAll(
+      "#hubspotFormContainer, #hubspotFormContainer2"
+    ),
+    r=document.querySelectorAll(
+      "#hubspotFormFallback, #hubspotFormFallback2"
+    );
 
-  containers.forEach((container, index) => {
-    const fallback = fallbacks[index];
-    if (!fallback) return;
+  c.forEach((e,t)=>{
+    const n=r[t];
+    if(!n)return;
 
-    const timeout = setTimeout(() => {
-      const iframe = container.querySelector('iframe');
-      if (!iframe) {
-        fallback.style.display = 'block';
-      }
-    }, 3000);
+    const o=setTimeout(()=>{
+      e.querySelector("iframe")||(n.style.display="block")
+    },3e3);
 
-    window.addEventListener('message', (event) => {
-      if (
-        event.data &&
-        event.data.type === 'hsFormCallback' &&
-        event.data.eventName === 'onFormReady'
-      ) {
-        clearTimeout(timeout);
-        fallback.style.display = 'none';
-      }
-    });
-  });
+    window.addEventListener("message",e=>{
+      e.data&&
+      "hsFormCallback"===e.data.type&&
+      "onFormReady"===e.data.eventName&&(
+        clearTimeout(o),
+        n.style.display="none"
+      )
+    })
+  })
 });
